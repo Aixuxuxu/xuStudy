@@ -1,16 +1,22 @@
 package com.aixu.config;
 
 import com.aixu.entity.RestBean;
+import com.aixu.service.AuthorityService;
 import com.alibaba.fastjson2.JSONObject;
+import jakarta.annotation.Resource;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import java.io.IOException;
@@ -18,6 +24,9 @@ import java.io.IOException;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    @Resource
+    private AuthorityService authorityService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -40,8 +49,25 @@ public class SecurityConfig {
                 .build();
     }
 
+    /**
+     * 配置数据库验证
+     * @param security  当前对象
+     * @return  AuthenticationManager
+     * @throws Exception    x
+     */
+    @Bean("authenticationManager")
+    public AuthenticationManager authenticationManager(HttpSecurity security) throws Exception {
+       return security
+               .getSharedObject(AuthenticationManagerBuilder.class)
+               .userDetailsService(authorityService)
+               .and()
+               .build();
+    }
 
-
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
 
     /**
      * 登录成功处理
