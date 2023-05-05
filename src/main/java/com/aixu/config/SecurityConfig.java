@@ -18,6 +18,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.io.IOException;
 
@@ -41,12 +44,34 @@ public class SecurityConfig {
                 .and()
                 .logout()
                 .logoutUrl("/api/auth/logout")
+                .logoutSuccessHandler(this::onAuthenticationSuccess)
                 .and()
                 .csrf().disable()   // 暂时关闭 CSRF
+                .cors()
+                .configurationSource(this.corsConfigurationSource())  // 跨域设置
+                .and()
                 .exceptionHandling()    // 设置访问页面没有权限的响应
                 .authenticationEntryPoint(this::onAuthenticationFailure)    //我们希望给没有权限的用户返回 JSON 格式的信息
                 .and()
                 .build();
+    }
+
+
+    /**
+     * 配置 跨域 规则
+     * @return  ：CorsConfigurationSource
+     */
+    private CorsConfigurationSource corsConfigurationSource(){
+        CorsConfiguration cors = new CorsConfiguration();
+//        cors.addAllowedOriginPattern("http://http://127.0.0.1:5173/");
+        cors.addAllowedOriginPattern("*");
+        cors.setAllowCredentials(true); // 跨域允许携带 cookie
+        cors.addAllowedHeader("*");
+        cors.addAllowedMethod("*");
+        cors.addExposedHeader("*");
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", cors);
+        return source;
     }
 
     /**
@@ -80,7 +105,11 @@ public class SecurityConfig {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
         response.setCharacterEncoding("utf-8");
-        response.getWriter().write(JSONObject.toJSONString(RestBean.success("登录成功！")));
+        if(request.getRequestURI().endsWith("/login"))
+            response.getWriter().write(JSONObject.toJSONString(RestBean.success("登录成功！")));
+        else if(request.getRequestURI().endsWith("/logout"))
+            response.getWriter().write(JSONObject.toJSONString(RestBean.success("退出登录成功！")));
+
 
     }
 
