@@ -16,12 +16,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import javax.sql.DataSource;
 import java.io.IOException;
 
 @Configuration
@@ -31,8 +33,12 @@ public class SecurityConfig {
     @Resource
     private AuthorityService authorityService;
 
+    @Resource
+    private DataSource dataSource;
+
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http,
+                                           PersistentTokenRepository repository) throws Exception {
         return http
                 .authorizeHttpRequests()
                 .anyRequest().authenticated()   // 所有请求都需要 登录
@@ -44,7 +50,12 @@ public class SecurityConfig {
                 .and()
                 .logout()
                 .logoutUrl("/api/auth/logout")
-                .logoutSuccessHandler(this::onAuthenticationSuccess)
+                .logoutSuccessHandler(this::onAuthenticationSuccess) // 我们希望登退出录成功之后返回的是 JSON 格式的信息
+                .and()
+                .rememberMe()       // “ 记住我 ” 功能配置
+                .rememberMeParameter("remember")
+                .tokenRepository(repository)
+                .tokenValiditySeconds(60 * 60 * 24 * 7)
                 .and()
                 .csrf().disable()   // 暂时关闭 CSRF
                 .cors()
@@ -56,6 +67,18 @@ public class SecurityConfig {
                 .build();
     }
 
+
+    /**
+     * 配置 RememberMe，使用数据库来存储 token
+     * @return PersistentTokenRepository
+     */
+    @Bean
+    public PersistentTokenRepository tokenRepository(){
+        JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
+        jdbcTokenRepository.setDataSource(dataSource);
+        jdbcTokenRepository.setCreateTableOnStartup(false);  // 第一次启动创建表来存储token
+        return jdbcTokenRepository;
+    }
 
     /**
      * 配置 跨域 规则
