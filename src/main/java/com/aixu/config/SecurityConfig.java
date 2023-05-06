@@ -41,28 +41,30 @@ public class SecurityConfig {
                                            PersistentTokenRepository repository) throws Exception {
         return http
                 .authorizeHttpRequests()
-                .anyRequest().authenticated()   // 所有请求都需要 登录
+                .requestMatchers("/api/auth/**").permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .formLogin()
-                .loginProcessingUrl("/api/auth/login")  // 统一登录校验的接口路径
-                .successHandler(this::onAuthenticationSuccess)  // 我们希望登录成功之后返回的是 JSON 格式的信息
-                .failureHandler(this::onAuthenticationFailure)  // 我们希望登录失败之后返回的是 JSON 格式的信息
+                .loginProcessingUrl("/api/auth/login")
+                .successHandler(this::onAuthenticationSuccess)
+                .failureHandler(this::onAuthenticationFailure)
                 .and()
                 .logout()
                 .logoutUrl("/api/auth/logout")
-                .logoutSuccessHandler(this::onAuthenticationSuccess) // 我们希望登退出录成功之后返回的是 JSON 格式的信息
+                .logoutSuccessHandler(this::onAuthenticationSuccess)
                 .and()
-                .rememberMe()       // “ 记住我 ” 功能配置
+                .rememberMe()
                 .rememberMeParameter("remember")
                 .tokenRepository(repository)
-                .tokenValiditySeconds(60 * 60 * 24 * 7)
+                .tokenValiditySeconds(3600 * 24 * 7)
                 .and()
-                .csrf().disable()   // 暂时关闭 CSRF
+                .csrf()
+                .disable()
                 .cors()
-                .configurationSource(this.corsConfigurationSource())  // 跨域设置
+                .configurationSource(this.corsConfigurationSource())
                 .and()
-                .exceptionHandling()    // 设置访问页面没有权限的响应
-                .authenticationEntryPoint(this::onAuthenticationFailure)    //我们希望给没有权限的用户返回 JSON 格式的信息
+                .exceptionHandling()
+                .authenticationEntryPoint(this::onAuthenticationFailure)
                 .and()
                 .build();
     }
@@ -76,7 +78,7 @@ public class SecurityConfig {
     public PersistentTokenRepository tokenRepository(){
         JdbcTokenRepositoryImpl jdbcTokenRepository = new JdbcTokenRepositoryImpl();
         jdbcTokenRepository.setDataSource(dataSource);
-        jdbcTokenRepository.setCreateTableOnStartup(false);  // 第一次启动创建表来存储token
+//        jdbcTokenRepository.setCreateTableOnStartup(false);  // 第一次启动创建表来存储token
         return jdbcTokenRepository;
     }
 

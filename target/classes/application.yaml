@@ -1,6 +1,31 @@
 spring:
+#  Mysql数据源
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/aixu_study?useUnicode=true&characterEncoding=utf-8
     username: root
     password: 126127
+
+#    邮箱配置
+  mail:
+    username: 3085889216@qq.com
+    password: yvdzwsaiyrmxdgjj
+    host: smtp.qq.com
+    port: 465
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+        smtp:
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+          port: ${spring.mail.port}
+          auth: true
+          starttls:
+            enable: true
+            required: true
+  data:
+    redis:
+      host: localhost
+      database: 0
+      port: 6379
