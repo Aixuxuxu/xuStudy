@@ -1,7 +1,6 @@
 package com.aixu.service.impl;
 
 import com.aixu.entity.Account;
-import com.aixu.entity.RestBean;
 import com.aixu.mapper.AccountMapper;
 import com.aixu.service.AuthorityService;
 import jakarta.annotation.Resource;
