@@ -1,8 +1,11 @@
 package com.aixu.service;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 
 public interface AuthorityService extends UserDetailsService {
-    boolean sendValidateEmail(String email, String id);
+    String sendValidateEmail(String email, String id);
+
+    String  validateAndRegister(String username, String password, String email, String code, String sessionId);
 }

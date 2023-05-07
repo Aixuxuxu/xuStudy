@@ -1,6 +1,7 @@
 package com.aixu.service.impl;
 
 import com.aixu.entity.Account;
+import com.aixu.entity.RestBean;
 import com.aixu.mapper.AccountMapper;
 import com.aixu.service.AuthorityService;
 import jakarta.annotation.Resource;
@@ -12,6 +13,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -34,7 +36,38 @@ public class AuthorityServiceImpl implements AuthorityService {
     @Value("${spring.mail.username}")
     String from;
 
+    BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
+
+    @Override
+    public String validateAndRegister(String username, String password, String email, String code,String sessionId) {
+        String key = "email:" + sessionId + ":" + email;
+
+        // 查询 Redis 数据库是否存在 key
+        if(Boolean.TRUE.equals(template.hasKey(key))) {
+            String s = template.opsForValue().get(key);
+            if(s==null){return "验证码失效，请重新请求";}
+            if(s.equals(code)){
+                Account a = accountMapper.selectAccountByEmailOrName(username);
+                if(a != null) return "此用户名已被注册，请更换用户名";
+                template.delete(key);
+                password = bCryptPasswordEncoder.encode(password);  // 对密码进行加密
+
+                // 验证码相同,插入到数据库中
+                int account = accountMapper.createAccount(username, password, email);
+                if(account > 0){
+                    return null;
+                }else {
+                    return "内部错误，请联系管理员";
+                }
+            } else {
+                // 验证码不相同
+                return "验证码错误，请检查后再提交";
+            }
+        }
+
+            return "请先完成邮箱验证";
+    }
 
     /**
      * 构造 USerDetail 对象
@@ -67,17 +100,21 @@ public class AuthorityServiceImpl implements AuthorityService {
      * @return boolean
      */
     @Override
-    public boolean sendValidateEmail(String email, String sessionId) {
+    public String sendValidateEmail(String email, String sessionId) {
         String key = "email:" + sessionId + ":" + email;
 
         // 获取 验证码 的间隔为两分钟
         if(Boolean.TRUE.equals(template.hasKey(key))){
             Long expire = Optional.ofNullable(template.getExpire(key, TimeUnit.SECONDS)).orElse(0L);
             if(expire > 120){
-                return false;
+                return "请求频繁";
             }
         }
 
+        // 判断邮箱是否存在
+        if (accountMapper.selectAccountByEmailOrName(email) != null){
+            return  "该邮箱已存在";
+        }
         // 邮件设置
         Random random = new Random();
        int code  = random.nextInt(899999) + 100000;
@@ -93,10 +130,10 @@ public class AuthorityServiceImpl implements AuthorityService {
 
             // 发送邮件
             mailSender.send(message);
-            return true;
+            return null;
         }catch (MailException e){
             e.printStackTrace();
-            return false;
+            return "验证码发送失败，请检查邮箱是否有效";
         }
 
     }
