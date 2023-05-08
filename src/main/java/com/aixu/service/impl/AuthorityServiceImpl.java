@@ -37,6 +37,29 @@ public class AuthorityServiceImpl implements AuthorityService {
 
     BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
+    @Override
+    public String validateOnly(String email, String code, String sessionId) {
+        String key = "email:" + sessionId + ":" + email + ":true";
+        if(Boolean.TRUE.equals(template.hasKey(key))) {
+            String s = template.opsForValue().get(key);
+            if(s == null) return "验证码失效，请重新请求";
+            if(s.equals(code)) {
+                template.delete(key);
+                return null;
+            } else {
+                return "验证码错误，请检查后再提交";
+            }
+        } else {
+            return "请先请求一封验证码邮件";
+        }
+    }
+
+    @Override
+    public boolean resetPassword(String password, String email) {
+            password = bCryptPasswordEncoder.encode(password);
+            return accountMapper.resetPasswordByEmail(password, email) > 0;
+    }
+
 
     @Override
     public String validateAndRegister(String username, String password, String email, String code,String sessionId) {
@@ -99,8 +122,8 @@ public class AuthorityServiceImpl implements AuthorityService {
      * @return boolean
      */
     @Override
-    public String sendValidateEmail(String email, String sessionId) {
-        String key = "email:" + sessionId + ":" + email;
+    public String sendValidateEmail(String email, String sessionId,Boolean hasAccount) {
+        String key = "email:" + sessionId + ":" + email + ":" + hasAccount;
 
         // 获取 验证码 的间隔为两分钟
         if(Boolean.TRUE.equals(template.hasKey(key))){
@@ -109,11 +132,10 @@ public class AuthorityServiceImpl implements AuthorityService {
                 return "请求频繁";
             }
         }
-
+        Account account = accountMapper.selectAccountByEmailOrName(email);
         // 判断邮箱是否存在
-        if (accountMapper.selectAccountByEmailOrName(email) != null){
-            return  "该邮箱已存在";
-        }
+        if(hasAccount && account == null) return "没有此邮件地址的账户";
+        if(!hasAccount && account != null) return "此邮箱已被其他用户注册";
         // 邮件设置
         Random random = new Random();
        int code  = random.nextInt(899999) + 100000;
