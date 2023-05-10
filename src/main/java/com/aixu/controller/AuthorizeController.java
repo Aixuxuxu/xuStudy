@@ -76,7 +76,7 @@ public class AuthorizeController {
      * @param session   Session
      * @return  x
      */
-    @PostMapping("/validate-reset-email")
+    @PostMapping("/valid-reset-email")
     public RestBean<String> validateResetEmail(@Pattern(regexp = EMAIL_REGEXP)
                                           @RequestParam("email")
                                           String email, HttpSession session){   // 要求必须传入 email 参数
