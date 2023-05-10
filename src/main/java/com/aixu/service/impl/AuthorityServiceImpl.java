@@ -63,7 +63,7 @@ public class AuthorityServiceImpl implements AuthorityService {
 
     @Override
     public String validateAndRegister(String username, String password, String email, String code,String sessionId) {
-        String key = "email:" + sessionId + ":" + email;
+        String key = "email:" + sessionId + ":" + email+ ":false" ;
 
         // 查询 Redis 数据库是否存在 key
         if(Boolean.TRUE.equals(template.hasKey(key))) {
