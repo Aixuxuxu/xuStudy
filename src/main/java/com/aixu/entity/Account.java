@@ -2,7 +2,6 @@ package com.aixu.entity;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.springframework.data.relational.core.sql.In;
 
 @Data
 @Accessors(chain = true)
