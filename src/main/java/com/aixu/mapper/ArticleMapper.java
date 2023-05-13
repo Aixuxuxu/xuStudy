@@ -11,6 +11,14 @@ import java.util.Map;
 public interface ArticleMapper {
 
     /**
+     * 根据 文章Id 查询单个文章
+     * @param articleId 文章Id
+     * @return  文章信息
+     */
+    @Select("select * from db_article where id=#{articleId}")
+    Article selectById(Integer articleId);
+
+    /**
      * 分页查询所有
      * @return  List集合
      */

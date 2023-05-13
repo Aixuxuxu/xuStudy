@@ -2,6 +2,8 @@ package com.aixu.service.impl;
 
 import com.aixu.entity.Article;
 import com.aixu.entity.Pager;
+import com.aixu.entity.dto.ArticleDetailsDTO;
+import com.aixu.mapper.AccountAndArticleMapper;
 import com.aixu.mapper.ArticleMapper;
 import com.aixu.service.ArticleService;
 import jakarta.annotation.Resource;
@@ -20,6 +22,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Resource
     private ArticleMapper articleMapper;
+
+    @Resource
+    private AccountAndArticleMapper accountAndArticleMapper;
 
     @Override
     public Pager<Article> getAllArticle(int page,int size) {
@@ -44,5 +49,20 @@ public class ArticleServiceImpl implements ArticleService {
         }
         // 插入失败
         return "文章发布失败，请联系管理员";
+    }
+
+    @Override
+    public ArticleDetailsDTO getArticle(Integer articleId, Integer accountId) {
+        Article article = articleMapper.selectById(articleId);
+
+        int isLikeCount = accountAndArticleMapper.selectIsLikeCountByArticleId(articleId);
+        int isStarCount = accountAndArticleMapper.selectIsStarCountByArticleId(articleId);
+
+        return new ArticleDetailsDTO()
+                .setTitle(article.getTitle())
+                .setContent(article.getContent())
+                .setCreateTime(article.getCreateTime())
+                .setIsLikeCount(isLikeCount)
+                .setIsStarCount(isStarCount);
     }
 }

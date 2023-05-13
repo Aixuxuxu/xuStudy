@@ -1,6 +1,7 @@
 package com.aixu.aixubackend;
 
 import com.aixu.entity.Article;
+import com.aixu.entity.dto.ArticleDetailsDTO;
 import com.aixu.mapper.ArticleMapper;
 import com.aixu.service.ArticleService;
 import jakarta.annotation.Resource;
@@ -38,6 +39,12 @@ class AixuBackendApplicationTests {
             System.out.println(obj.toString());
         }
         System.out.println(articleMapper.selectAllByAccountId(1).size());
+    }
+
+    @Test
+    void testGetArticle(){
+        ArticleDetailsDTO article = articleService.getArticle(25, 1);
+        System.out.println(article);
     }
 
 }
