@@ -3,7 +3,9 @@ package com.aixu.service;
 import com.aixu.entity.Article;
 import com.aixu.entity.Pager;
 import com.aixu.entity.dto.ArticleDetailsDTO;
+import com.aixu.entity.dto.UserStarArticleDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface ArticleService {
@@ -12,7 +14,7 @@ public interface ArticleService {
      * 获取所有文章
      * @return  文章集合
      */
-    Pager<Article> getAllArticle(int page, int size);
+    Pager<ArticleDetailsDTO> getAllArticle(int page, int size);
 
 
     /**
@@ -30,4 +32,15 @@ public interface ArticleService {
      * @return 文章对象
      */
     ArticleDetailsDTO getArticle(Integer articleId, Integer accountId);
+
+    ArrayList<UserStarArticleDTO> getUserStarArticle(Integer accountId);
+
+    /**
+     * 根据用户ID和文章ID修改 收藏
+     * @param isStar
+     * @param accountId
+     * @param articleId
+     * @return
+     */
+    String deleteArticleStar(Integer isStar, Integer accountId, Integer articleId);
 }

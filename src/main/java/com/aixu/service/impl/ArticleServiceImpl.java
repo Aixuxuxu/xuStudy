@@ -3,19 +3,16 @@ package com.aixu.service.impl;
 import com.aixu.entity.Article;
 import com.aixu.entity.Pager;
 import com.aixu.entity.dto.ArticleDetailsDTO;
+import com.aixu.entity.dto.UserStarArticleDTO;
 import com.aixu.mapper.AccountAndArticleMapper;
 import com.aixu.mapper.ArticleMapper;
 import com.aixu.service.ArticleService;
 import jakarta.annotation.Resource;
-import lombok.var;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
-import java.util.logging.SimpleFormatter;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -27,14 +24,14 @@ public class ArticleServiceImpl implements ArticleService {
     private AccountAndArticleMapper accountAndArticleMapper;
 
     @Override
-    public Pager<Article> getAllArticle(int page,int size) {
+    public Pager<ArticleDetailsDTO> getAllArticle(int page,int size) {
 
         HashMap<String, Object> params = new HashMap<>();
         params.put("page", (page-1) * size);
         params.put("size",size);
 
-        Pager<Article> articlePager = new Pager<>();
-        List<Article> articles = articleMapper.selectAllByPager(params);
+        Pager<ArticleDetailsDTO> articlePager = new Pager<>();
+        List<ArticleDetailsDTO> articles = articleMapper.selectAllByPager(params);
         articlePager.setRows(articles);
         articlePager.setTotal(articleMapper.count());
 
@@ -53,16 +50,28 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public ArticleDetailsDTO getArticle(Integer articleId, Integer accountId) {
-        Article article = articleMapper.selectById(articleId);
+        ArticleDetailsDTO article = articleMapper.selectById(articleId,accountId);
 
         int isLikeCount = accountAndArticleMapper.selectIsLikeCountByArticleId(articleId);
         int isStarCount = accountAndArticleMapper.selectIsStarCountByArticleId(articleId);
 
-        return new ArticleDetailsDTO()
-                .setTitle(article.getTitle())
-                .setContent(article.getContent())
-                .setCreateTime(article.getCreateTime())
-                .setIsLikeCount(isLikeCount)
-                .setIsStarCount(isStarCount);
+        return article
+                .setIsStarCount(isStarCount)
+                .setIsLikeCount(isLikeCount);
+    }
+
+    @Override
+    public ArrayList<UserStarArticleDTO> getUserStarArticle(Integer accountId) {
+        ArrayList<UserStarArticleDTO> userStarArticleDTOS = accountAndArticleMapper.selectStarArticleByUserId(accountId);
+        if (userStarArticleDTOS.isEmpty()) return null;
+
+        return userStarArticleDTOS;
+    }
+
+    @Override
+    public String deleteArticleStar(Integer isStar, Integer accountId, Integer articleId) {
+        int i = accountAndArticleMapper.updateIsStar(isStar, accountId, articleId);
+        if(i==0) return "删除失败，该文章疑似被删除或收藏，请联系管理员";
+        return null;
     }
 }

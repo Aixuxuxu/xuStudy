@@ -1,11 +1,13 @@
 package com.aixu.mapper;
 
 import com.aixu.entity.AccountAndArticle;
+import com.aixu.entity.dto.UserStarArticleDTO;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mapper
@@ -74,4 +76,16 @@ public interface AccountAndArticleMapper {
      */
     @Select("select count(*) from account_article where isStar=1 and articleId=#{articleId}")
     int selectIsStarCountByArticleId(Integer articleId);
+
+
+    /**
+     * 根据用户 Id 查询用户收藏过的所有文章
+     * @param accountId 用户ID
+     * @return  文章集合
+     */
+    @Select("select * " +
+            "from db_article article,(select * from account_article where accountId=#{accountId} and isStar=1) s " +
+            "where article.id = s.articleId")
+    ArrayList<UserStarArticleDTO> selectStarArticleByUserId(Integer accountId);
+
 }
