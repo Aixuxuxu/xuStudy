@@ -57,8 +57,8 @@ public interface ArticleMapper {
      * @param content   文章内容
      * @return  影响行数
      */
-    @Insert("insert into db_article (title,content) values (#{title},#{content});")
-    Integer insertArticle(String title,String content);
+    @Insert("insert into db_article (title,content,accountId) values (#{title},#{content},#{userId});")
+    Integer insertArticle(String title,String content,Integer userId);
 
     /**
      * 根据用户ID查询所属的文章列表

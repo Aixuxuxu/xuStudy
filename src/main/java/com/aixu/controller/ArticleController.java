@@ -21,15 +21,16 @@ public class ArticleController {
 //    private ArticleService articleService;
 
     @GetMapping("/getAllArticle")
-    public RestBean<List<ArticleDetailsDTO>> getAllArticle(){
-
-        return RestBean.success(articleService.getAllArticle(1, 10).getRows());
+    public RestBean<List<ArticleDetailsDTO>> getAllArticle(@RequestParam("page") Integer page){
+        if (page==null) return RestBean.failure(401);
+        return RestBean.success(articleService.getAllArticle(page, 10).getRows());
     }
     @PostMapping("/createArticle")
     public RestBean<String> createArticle(@RequestParam("title") String title,
-                                          @RequestParam("content") String content){
+                                          @RequestParam("content") String content,
+                                          @RequestParam("userId") Integer userId){
 
-        String s = articleService.createArticle(title,content);
+        String s = articleService.createArticle(title,content,userId);
         if( s == null){
             return RestBean.success("文章发布成功");
         }

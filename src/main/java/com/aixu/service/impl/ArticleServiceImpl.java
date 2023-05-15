@@ -1,6 +1,5 @@
 package com.aixu.service.impl;
 
-import com.aixu.entity.Article;
 import com.aixu.entity.Pager;
 import com.aixu.entity.dto.ArticleDetailsDTO;
 import com.aixu.entity.dto.UserStarArticleDTO;
@@ -39,8 +38,8 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public String createArticle(String title, String content) {
-        if(articleMapper.insertArticle(title,content) > 0){
+    public String createArticle(String title, String content, Integer userId) {
+        if(articleMapper.insertArticle(title,content,userId) > 0){
             // 插入成功
             return null;
         }
