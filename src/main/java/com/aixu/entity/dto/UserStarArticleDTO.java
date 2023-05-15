@@ -9,5 +9,6 @@ public class UserStarArticleDTO {
 
     private String articleId;
     private String title;
+    private String accountId;
 
 }
