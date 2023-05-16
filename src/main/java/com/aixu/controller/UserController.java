@@ -1,8 +1,7 @@
 package com.aixu.controller;
 
-import com.aixu.entity.AccountUser;
+import com.aixu.entity.dto.AccountUser;
 import com.aixu.entity.RestBean;
-import com.alibaba.fastjson2.JSONObject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

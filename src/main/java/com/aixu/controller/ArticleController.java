@@ -1,6 +1,5 @@
 package com.aixu.controller;
 
-import com.aixu.entity.Article;
 import com.aixu.entity.RestBean;
 import com.aixu.entity.dto.ArticleDetailsDTO;
 import com.aixu.entity.dto.UserStarArticleDTO;

@@ -1,7 +1,7 @@
 package com.aixu.mapper;
 
 import com.aixu.entity.Account;
-import com.aixu.entity.AccountUser;
+import com.aixu.entity.dto.AccountUser;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;

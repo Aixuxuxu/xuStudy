@@ -1,7 +1,6 @@
 package com.aixu.interceptor;
 
-import com.aixu.entity.Account;
-import com.aixu.entity.AccountUser;
+import com.aixu.entity.dto.AccountUser;
 import com.aixu.mapper.AccountMapper;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
