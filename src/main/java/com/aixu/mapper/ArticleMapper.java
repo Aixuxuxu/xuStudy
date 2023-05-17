@@ -2,6 +2,7 @@ package com.aixu.mapper;
 
 import com.aixu.entity.Article;
 import com.aixu.entity.dto.ArticleDetailsDTO;
+import com.aixu.entity.dto.UserStarArticleDTO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.ArrayList;
@@ -71,6 +72,12 @@ public interface ArticleMapper {
 //    @Select("select count(*) from db_article where accountId = #{accountId}")
 //    int selectAllCountByAccountId(Integer accountId);
 
-
+    /**
+     * 查询用户发布过的所有文章
+     * @param accountId 用户id
+     * @return  文章集合
+     */
+    @Select("select id,accountId,title,content,createtime,type from db_article where accountId = #{accountId}")
+    ArrayList<ArticleDetailsDTO> selectUserArticle(Integer accountId);
 
 }

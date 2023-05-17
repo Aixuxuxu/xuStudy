@@ -53,6 +53,18 @@ public class ArticleController {
     }
 
     /**
+     * 获取文章详情页
+     * @param accountId 用户ID
+     * @return 文章对象
+     */
+    @GetMapping("/getUserArticle")
+    public RestBean<List<ArticleDetailsDTO>> getUserArticle(@RequestParam("accountId") Integer accountId){
+        if(accountId==null)return RestBean.failure(401);
+        ArrayList<ArticleDetailsDTO> userArticles = articleService.getUserArticle( accountId);
+        return RestBean.success(userArticles);
+    }
+
+    /**
      * 查询用户收藏过的文章
      * @param accountId 用户ID
      * @return  文章集合

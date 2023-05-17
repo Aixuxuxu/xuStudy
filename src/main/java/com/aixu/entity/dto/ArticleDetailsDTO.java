@@ -14,4 +14,5 @@ public class ArticleDetailsDTO {
     private String createTime;
     private Integer isLikeCount;
     private Integer isStarCount;
+    private String type;
 }

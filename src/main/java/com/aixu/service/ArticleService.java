@@ -3,6 +3,7 @@ package com.aixu.service;
 import com.aixu.entity.Pager;
 import com.aixu.entity.dto.ArticleDetailsDTO;
 import com.aixu.entity.dto.UserStarArticleDTO;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.ArrayList;
 
@@ -43,4 +44,12 @@ public interface ArticleService {
      * @return
      */
     String deleteArticleStar(Integer isStar, Integer accountId, Integer articleId);
+
+    /**
+     * 查询用户发布的文章
+     * @param accountId 用户id
+     * @return  文章集合
+     */
+    @Select("select * from ")
+    ArrayList<ArticleDetailsDTO> getUserArticle(Integer accountId);
 }

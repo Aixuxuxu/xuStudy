@@ -73,4 +73,11 @@ public class ArticleServiceImpl implements ArticleService {
         if(i==0) return "删除失败，该文章疑似被删除或收藏，请联系管理员";
         return null;
     }
+
+
+    @Override
+    public ArrayList<ArticleDetailsDTO> getUserArticle(Integer accountId) {
+
+        return articleMapper.selectUserArticle(accountId);
+    }
 }
