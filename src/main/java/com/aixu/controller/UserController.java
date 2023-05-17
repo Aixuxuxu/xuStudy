@@ -20,7 +20,12 @@ public class UserController {
     @GetMapping("/me")
     public RestBean<AccountUser> me( @SessionAttribute("account") AccountUser accountUser){
 //        return RestBean.success(JSONObject.toJSONString(accountUser));
-        return RestBean.success(accountUser);
+        try {
+            return RestBean.success(accountUser);
+        }catch (Exception e){
+            e.getStackTrace();
+            return RestBean.failure(401);
+        }
 
     }
 

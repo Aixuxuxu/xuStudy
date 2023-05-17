@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
@@ -30,7 +29,7 @@ class AixuBackendApplicationTests {
 
     @Test
     void testInsertArticle(){
-        System.out.println(articleService.createArticle("小星星变奏曲", "第一步。。。。。。"));
+//        System.out.println(articleService.createArticle("小星星变奏曲", "第一步。。。。。。", userId));
     }
     @Test
     void testSelectArticle(){
@@ -45,6 +44,13 @@ class AixuBackendApplicationTests {
     void testGetArticle(){
         ArticleDetailsDTO article = articleService.getArticle(25, 1);
         System.out.println(article);
+    }
+
+    @Test
+    void test(){
+        System.out.println(10%10);
+        System.out.println(11%10);
+        System.out.println(12%10);
     }
 
 }
