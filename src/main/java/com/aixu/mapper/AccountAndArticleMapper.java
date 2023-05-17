@@ -20,8 +20,16 @@ public interface AccountAndArticleMapper {
      * @return  影响行数
      */
     @Insert("insert into account_article (accountId,articleId) values (#{accountId},#{articleId})")
-    int insert(Integer accountId,Integer articleId);
+    int insert(Integer accountId, Integer articleId);
 
+    /**
+     * 查询该表中是否有该映射
+     * @param accountId 用户id
+     * @param articleId   文章id
+     * @return
+     */
+    @Select("select accountId,articleId from account_article where accountId=#{accountId} and articleId=#{articleId} ")
+    AccountAndArticle selectMap(Integer accountId,Integer articleId);
 
     /**
      * 更新点赞
@@ -88,4 +96,6 @@ public interface AccountAndArticleMapper {
             "where article.id = s.articleId")
     ArrayList<UserStarArticleDTO> selectStarArticleByUserId(Integer accountId);
 
+    @Select("select count(*) from account_article where accountId=#{accountId}")
+    int getSelectCount(Integer accountId);
 }

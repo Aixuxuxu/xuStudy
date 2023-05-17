@@ -80,4 +80,5 @@ public interface ArticleMapper {
     @Select("select id,accountId,title,content,createtime,type from db_article where accountId = #{accountId}")
     ArrayList<ArticleDetailsDTO> selectUserArticle(Integer accountId);
 
+
 }

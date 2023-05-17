@@ -1,5 +1,6 @@
 package com.aixu.service.impl;
 
+import com.aixu.entity.AccountAndArticle;
 import com.aixu.entity.Pager;
 import com.aixu.entity.dto.ArticleDetailsDTO;
 import com.aixu.entity.dto.UserStarArticleDTO;
@@ -76,8 +77,35 @@ public class ArticleServiceImpl implements ArticleService {
 
 
     @Override
+    public int getLikeCount(Integer accountId) {
+        return accountAndArticleMapper.selectIsLikeCountByArticleId(accountId);
+    }
+
+    @Override
+    public int getStarCount(Integer accountId) {
+        return accountAndArticleMapper.selectIsStarCountByArticleId(accountId);
+    }
+
+    @Override
     public ArrayList<ArticleDetailsDTO> getUserArticle(Integer accountId) {
 
         return articleMapper.selectUserArticle(accountId);
+    }
+
+    @Override
+    public int getSelectCount(Integer accountId) {
+        return accountAndArticleMapper.getSelectCount(accountId);
+    }
+
+    @Override
+    public String insertMessage(Integer accountId, Integer articleId) {
+        AccountAndArticle accountAndArticle = accountAndArticleMapper.selectMap(accountId, articleId);
+        if (accountAndArticle == null){
+            int insert = accountAndArticleMapper.insert(accountId, articleId);
+            if(insert > 0) return null;
+            else return "更新失败";
+        }
+
+        return null;
     }
 }

@@ -86,4 +86,47 @@ public class ArticleController {
         if(s != null) return RestBean.failure(401,s);
         return RestBean.success("删除成功");
     }
+
+    /**
+     * 根据用户Id查询 该用户点赞的文章数量
+     * @param accountId 用户Id
+     * @return  List集合
+     */
+    @GetMapping("/getLikeCount")
+    public RestBean<Integer> getLikeCount(@RequestParam("accountId") Integer accountId){
+        if(accountId == null) return RestBean.failure(0);
+        int Count = articleService.getLikeCount(accountId);
+        return RestBean.success(Count);
+    }
+
+    /**
+     * 根据用户Id查询 该用户收藏的文章数量
+     * @param accountId 用户Id
+     * @return  List集合
+     */
+    @GetMapping("/getStarsCount")
+    public RestBean<Integer> getStarsCount(@RequestParam("accountId") Integer accountId){
+        if(accountId == null) return RestBean.failure(0);
+        int Count = articleService.getStarCount(accountId);
+        return RestBean.success(Count);
+    }
+    /**
+     * 根据用户Id查询 该用户收藏的浏览过的文章数量
+     * @param accountId 用户Id
+     * @return  List集合
+     */
+    @GetMapping("/getSelectCount")
+    public RestBean<Integer> getSelectCount(@RequestParam("accountId") Integer accountId){
+        if(accountId == null) return RestBean.failure(0);
+        int Count = articleService.getSelectCount(accountId);
+        return RestBean.success(Count);
+    }
+
+    @GetMapping("/insertMessage")
+    public RestBean<String> insertMessage(@RequestParam("accountId") Integer accountId,
+                                          @RequestParam("articleId") Integer articleId){
+        if (accountId == null || articleId == null) return RestBean.failure(401);
+        if(articleService.insertMessage(accountId,articleId) != null) return RestBean.failure(400,"更新失败");
+        return RestBean.success();
+    }
 }

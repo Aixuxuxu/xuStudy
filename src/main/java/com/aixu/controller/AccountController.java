@@ -46,8 +46,6 @@ public class AccountController {
         if (id == null || backgroundImg.isEmpty()) return RestBean.failure(401);
 
         try {
-//            StringBuffer sb = new StringBuffer();
-//            sb.append(avatar);
             String s = accountService.updateAccountBackgroundById(id, backgroundImg);
             if(s==null) return RestBean.success("更新背景成功");
             else return RestBean.failure(401,"背景更新失败，请联系管理员");
@@ -84,7 +82,7 @@ public class AccountController {
     public RestBean<String> updateUser( @RequestParam("accountId") Integer accountId,
                                         @Pattern(regexp = USERNAME_REGEXP)  @RequestParam("username") String username,
                                         @Pattern(regexp = EMAIL_REGEXP)     @RequestParam("email") String email,
-                                            @RequestParam("introduce") String introduce){
+                                        String introduce){
         if (accountId == null || username.isEmpty() || email.isEmpty()) return RestBean.failure(401,"用户名或邮箱不能为空");
         try {
            AccountUser accountUser  = new AccountUser()
@@ -100,4 +98,6 @@ public class AccountController {
             return RestBean.failure(401,"异常，请联系管理员");
         }
     }
+
+
 }

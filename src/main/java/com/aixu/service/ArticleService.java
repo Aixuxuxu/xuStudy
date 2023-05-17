@@ -52,4 +52,12 @@ public interface ArticleService {
      */
     @Select("select * from ")
     ArrayList<ArticleDetailsDTO> getUserArticle(Integer accountId);
+
+    int getLikeCount(Integer accountId);
+
+    int getStarCount(Integer accountId);
+
+    int getSelectCount(Integer accountId);
+
+    String insertMessage(Integer accountId, Integer articleId);
 }
