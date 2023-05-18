@@ -43,7 +43,7 @@ public interface ArticleMapper {
             "GROUP BY a.id, u.username\n" +
             "ORDER BY isLikeCount DESC, isStarCount DESC " +
             "limit #{page},#{size}")
-    List<ArticleDetailsDTO> selectAllByPager(Map<String , Object> params);
+    ArrayList<ArticleDetailsDTO> selectAllByPager(Map<String , Object> params);
 
     /**
      * 通过文章数量
@@ -81,4 +81,9 @@ public interface ArticleMapper {
     ArrayList<ArticleDetailsDTO> selectUserArticle(Integer accountId);
 
 
+    @Delete("delete from db_article where accountId=#{accountId} and id=#{articleId} ")
+    int deleteArticle(Integer accountId,Integer articleId);
+
+    @Update("update db_article set title=#{title},content=#{content} where id=#{articleId} ")
+    int updateArticleById(String title,String content,Integer articleId);
 }

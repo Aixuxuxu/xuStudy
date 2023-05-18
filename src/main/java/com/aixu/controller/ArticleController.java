@@ -1,5 +1,6 @@
 package com.aixu.controller;
 
+import com.aixu.entity.Article;
 import com.aixu.entity.RestBean;
 import com.aixu.entity.dto.ArticleDetailsDTO;
 import com.aixu.entity.dto.UserStarArticleDTO;
@@ -23,6 +24,13 @@ public class ArticleController {
     public RestBean<List<ArticleDetailsDTO>> getAllArticle(@RequestParam("page") Integer page){
         if (page==null) return RestBean.failure(401);
         return RestBean.success(articleService.getAllArticle(page, 10).getRows());
+    }
+
+    @GetMapping("/getTopArticle")
+    public RestBean<List<ArticleDetailsDTO>> getTopArticle(){
+       List<ArticleDetailsDTO> list  =  articleService.getTopArticle();
+       if(list == null) return RestBean.failure(400);
+        else return RestBean.success(list);
     }
     @PostMapping("/createArticle")
     public RestBean<String> createArticle(@RequestParam("title") String title,
@@ -128,5 +136,40 @@ public class ArticleController {
         if (accountId == null || articleId == null) return RestBean.failure(401);
         if(articleService.insertMessage(accountId,articleId) != null) return RestBean.failure(400,"更新失败");
         return RestBean.success();
+    }
+
+
+    /**
+     * 文章删除
+     * @param accountId：用户id
+     * @param articleId 文章id
+     * @return  null
+     */
+    @GetMapping("/deleteArticle")
+    public RestBean<String> deleteArticle(@RequestParam("accountId") Integer accountId,
+                                          @RequestParam("articleId") Integer articleId){
+        if (accountId == null || articleId == null) return RestBean.failure(401);
+        String s = articleService.deleteArticle(accountId,articleId);
+        if(s == null) return RestBean.success();
+        else return RestBean.failure(400,s);
+    }
+
+    /**
+     * 更新/编辑文章
+     * @param articleId 文章id
+     * @return  string
+     */
+    @PostMapping("/updateArticle")
+    public RestBean<String> updateArticle(@RequestParam("articleId") Integer articleId,
+                                          @RequestParam("title") String title,
+                                          @RequestParam("content") String content){
+        if (articleId == null || title.isEmpty()) return RestBean.failure(401,"参数不能为空");
+        String s = articleService.updateArticle(new Article()
+                .setId(articleId)
+                .setTitle(title)
+                .setContent(content)
+        );
+        if(s==null) return RestBean.success("修改成功");
+        else return RestBean.failure(400,s);
     }
 }

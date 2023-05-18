@@ -2,10 +2,7 @@ package com.aixu.mapper;
 
 import com.aixu.entity.AccountAndArticle;
 import com.aixu.entity.dto.UserStarArticleDTO;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,4 +95,8 @@ public interface AccountAndArticleMapper {
 
     @Select("select count(*) from account_article where accountId=#{accountId}")
     int getSelectCount(Integer accountId);
+
+
+    @Delete("delete from account_article where articleId=#{articleId}")
+    int deleteMap(Integer articleId);
 }

@@ -1,11 +1,14 @@
 package com.aixu.service;
 
+import com.aixu.entity.Article;
 import com.aixu.entity.Pager;
 import com.aixu.entity.dto.ArticleDetailsDTO;
 import com.aixu.entity.dto.UserStarArticleDTO;
 import org.apache.ibatis.annotations.Select;
 
+import javax.swing.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public interface ArticleService {
 
@@ -50,7 +53,6 @@ public interface ArticleService {
      * @param accountId 用户id
      * @return  文章集合
      */
-    @Select("select * from ")
     ArrayList<ArticleDetailsDTO> getUserArticle(Integer accountId);
 
     int getLikeCount(Integer accountId);
@@ -60,4 +62,10 @@ public interface ArticleService {
     int getSelectCount(Integer accountId);
 
     String insertMessage(Integer accountId, Integer articleId);
+
+    String deleteArticle(Integer accountId, Integer articleId);
+
+    String updateArticle(Article article);
+
+    List<ArticleDetailsDTO> getTopArticle();
 }
