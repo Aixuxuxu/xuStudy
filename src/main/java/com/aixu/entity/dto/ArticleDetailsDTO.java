@@ -17,4 +17,5 @@ public class ArticleDetailsDTO implements Serializable {
     private Integer isLikeCount;
     private Integer isStarCount;
     private String type;
+    private String avatar;
 }

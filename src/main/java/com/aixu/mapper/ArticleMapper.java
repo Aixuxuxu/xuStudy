@@ -36,7 +36,7 @@ public interface ArticleMapper {
     @Select("SELECT a.title, a.content, a.id ,a.accountId ,a.createtime, \n" +
             "    SUM(CASE WHEN aa.isLike = 1 THEN 1 ELSE 0 END) AS isLikeCount, \n" +
             "    SUM(CASE WHEN aa.isStar = 1 THEN 1 ELSE 0 END) AS isStarCount, \n" +
-            "    u.username\n" +
+            "    u.username,u.avatar\n" +
             "FROM db_article a\n" +
             "JOIN db_account u ON a.accountId = u.id\n" +
             "LEFT JOIN account_article aa ON a.id = aa.articleId\n" +
