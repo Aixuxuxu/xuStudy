@@ -81,9 +81,37 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public String deleteArticleStar(Integer isStar, Integer accountId, Integer articleId) {
-        int i = accountAndArticleMapper.updateIsStar(isStar, accountId, articleId);
-        if(i==0) return "删除失败，该文章疑似被删除或收藏，请联系管理员";
-        return null;
+        AccountAndArticle accountAndArticle = accountAndArticleMapper.selectMap(accountId, articleId);
+        if (accountAndArticle == null) return "该文章疑不存在，请联系管理员";
+        int oldIsStar = accountAndArticle.getIsStar();
+        int i;
+        if(oldIsStar == isStar){
+            // 相等说明是取消
+            i = accountAndArticleMapper.updateIsStar(0,accountId,articleId);
+        }else{
+            // 不相等说明是添加
+            i = accountAndArticleMapper.updateIsStar(isStar, accountId, articleId);
+        }
+        if(i>0) return null;
+
+        return "操作失败，请联系管理员";
+    }
+    @Override
+    public String deleteArticleLike(Integer isLike, Integer accountId, Integer articleId) {
+        AccountAndArticle accountAndArticle = accountAndArticleMapper.selectMap(accountId, articleId);
+        if (accountAndArticle == null) return "该文章疑不存在，请联系管理员";
+        int oldIsLike = accountAndArticle.getIsLike();
+        int i;
+        if(oldIsLike == isLike){
+            // 相等说明是取消
+            i = accountAndArticleMapper.updateIsStar(0,accountId,articleId);
+        }else{
+            // 不相等说明是添加
+            i = accountAndArticleMapper.updateIsStar(isLike, accountId, articleId);
+        }
+        if(i>0) return null;
+
+        return "操作失败，请联系管理员";
     }
 
 

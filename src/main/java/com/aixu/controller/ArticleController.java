@@ -17,8 +17,6 @@ public class ArticleController {
 
     @Resource
     private ArticleService articleService;
-//    @Resource
-//    private ArticleService articleService;
 
     @GetMapping("/getAllArticle")
     public RestBean<List<ArticleDetailsDTO>> getAllArticle(@RequestParam("page") Integer page){
@@ -92,7 +90,16 @@ public class ArticleController {
         if (isStar==null || accountId==null || articleId==null) return RestBean.failure(401,"请求参数不能为空");
         String s = articleService.deleteArticleStar(isStar,accountId,articleId);
         if(s != null) return RestBean.failure(401,s);
-        return RestBean.success("删除成功");
+        return RestBean.success("操作成功");
+    }
+    @GetMapping("/deleteArticleLike")
+    public RestBean<String> deleteArticleLike(@RequestParam("isStar") Integer isLike,
+                                              @RequestParam("accountId") Integer accountId,
+                                              @RequestParam("articleId") Integer articleId){
+        if (isLike==null || accountId==null || articleId==null) return RestBean.failure(401,"请求参数不能为空");
+        String s = articleService.deleteArticleLike(isLike,accountId,articleId);
+        if(s != null) return RestBean.failure(401,s);
+        return RestBean.success("操作成功");
     }
 
     /**

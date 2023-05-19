@@ -47,6 +47,7 @@ public interface ArticleService {
      * @return
      */
     String deleteArticleStar(Integer isStar, Integer accountId, Integer articleId);
+    String deleteArticleLike(Integer isLike, Integer accountId, Integer articleId);
 
     /**
      * 查询用户发布的文章
