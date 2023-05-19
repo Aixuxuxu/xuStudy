@@ -104,10 +104,10 @@ public class ArticleServiceImpl implements ArticleService {
         int i;
         if(oldIsLike == isLike){
             // 相等说明是取消
-            i = accountAndArticleMapper.updateIsStar(0,accountId,articleId);
+            i = accountAndArticleMapper.updateIsLike(0,accountId,articleId);
         }else{
             // 不相等说明是添加
-            i = accountAndArticleMapper.updateIsStar(isLike, accountId, articleId);
+            i = accountAndArticleMapper.updateIsLike(isLike, accountId, articleId);
         }
         if(i>0) return null;
 

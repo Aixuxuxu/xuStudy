@@ -25,7 +25,7 @@ public interface AccountAndArticleMapper {
      * @param articleId   文章id
      * @return
      */
-    @Select("select accountId,articleId from account_article where accountId=#{accountId} and articleId=#{articleId} ")
+    @Select("select accountId,articleId,isLike,isStar from account_article where accountId=#{accountId} and articleId=#{articleId} ")
     AccountAndArticle selectMap(Integer accountId,Integer articleId);
 
     /**

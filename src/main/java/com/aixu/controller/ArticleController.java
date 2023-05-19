@@ -93,7 +93,7 @@ public class ArticleController {
         return RestBean.success("操作成功");
     }
     @GetMapping("/deleteArticleLike")
-    public RestBean<String> deleteArticleLike(@RequestParam("isStar") Integer isLike,
+    public RestBean<String> deleteArticleLike(@RequestParam("isLike") Integer isLike,
                                               @RequestParam("accountId") Integer accountId,
                                               @RequestParam("articleId") Integer articleId){
         if (isLike==null || accountId==null || articleId==null) return RestBean.failure(401,"请求参数不能为空");
