@@ -117,12 +117,12 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public int getLikeCount(Integer accountId) {
-        return accountAndArticleMapper.selectIsLikeCountByArticleId(accountId);
+        return accountAndArticleMapper.selectIsLikeCountByAccountId(accountId);
     }
 
     @Override
     public int getStarCount(Integer accountId) {
-        return accountAndArticleMapper.selectIsStarCountByArticleId(accountId);
+        return accountAndArticleMapper.selectIsStarCountByAccountId(accountId);
     }
 
     @Override

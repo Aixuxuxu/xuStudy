@@ -15,6 +15,6 @@ public class Comments {
     private Integer isDelete;
 
     private String username;
-    private String avatar;
+//    private String avatar;
 
 }

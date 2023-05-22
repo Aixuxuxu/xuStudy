@@ -56,8 +56,18 @@ public interface ArticleService {
      */
     ArrayList<ArticleDetailsDTO> getUserArticle(Integer accountId);
 
+    /**
+     * 根据用户id查询文章点赞数
+     * @param accountId 用户id
+     * @return x
+     */
     int getLikeCount(Integer accountId);
 
+    /**
+     * 根据用户id查询文章收藏数
+     * @param accountId 用户id
+     * @return x
+     */
     int getStarCount(Integer accountId);
 
     int getSelectCount(Integer accountId);
